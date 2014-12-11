@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+# 
+# http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+#  KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+-->
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.movistar.mimovistar"
+        version   = "1.1.1">
+		<name>Mi Movistar - AR</name>
+		<description>Mi Movistar - Argentina</description>
+		<author href="www.acrons.net" email="info@acrons.net">Acrons App Dev</author>
+  <access origin="*"/>
+  <preference name="phonegap-version" value="3.6.3"/>
+  <preference name="orientation" value="portrait"/>
+  <preference name="fullscreen" value="true"/>
+  <preference name="target-device" value="universal"/>
+  <preference name="webviewbounce" value="true"/>
+  <preference name="prerendered-icon" value="true"/>
+  <preference name="stay-in-webview" value="true"/>
+  <preference name="ios-statusbarstyle" value="black-transparent"/>
+  <preference name="detect-data-types" value="true"/>
+  <preference name="exit-on-suspend" value="true"/>
+  <preference name="show-splash-screen-spinner" value="true"/>
+  <preference name="auto-hide-splash-screen" value="true"/>
+  <preference name="EnableViewportScale" value="true"/>
+  <preference name="MediaPlaybackRequiresUserAction" value="true"/>
+  <preference name="AllowInlineMediaPlayback" value="true"/>
+  <preference name="BackupWebStorage" value="cloud"/>
+  <preference name="TopActivityIndicator" value="gray"/>
+  <preference name="KeyboardDisplayRequiresUserAction" value="true"/>
+  <preference name="HideKeyboardFormAccessoryBar" value="true"/>
+  <preference name="SuppressesIncrementalRendering" value="true"/>
+  <preference name="SplashScreenDelay" value="50000"/>
+  <preference name="ErrorUrl" value=""/>
+  <preference name="BackgroundColor" value="0x000000"/>
+  <preference name="KeepRunning" value="true"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="LoadingDialog" value=","/>
+  <preference name="LoadUrlTimeoutValue" value="20000"/>
+  <preference name="disable-cursor" value="true"/>
+  <gap:plugin name="org.apache.cordova.geolocation" />
+  <gap:plugin name="org.apache.cordova.network-information" />
+  <gap:plugin name="org.apache.cordova.splashscreen" />
+  <gap:plugin name="org.apache.cordova.device" />
+  <gap:platform name="winphone" />
+  <icon src="res/icon/windows-phone/icon-62-tile.png" gap:platform="winphone" />
+  <icon src="res/icon/windows-phone/icon-173-tile.png" gap:platform="winphone" gap:role="background" />
+  <gap:splash src="res/screen/windows-phone/screen-portrait.jpg" gap:platform="winphone" />
+    <feature name="PushNotificationPlugin">
+        <param name="wp-package" onload="true" value="PushNotificationPlugin" />
+    </feature>
+    <preference name="eu.endare.push.registration_uri" value="https://appcontainerhub-ns.servicebus.windows.net/appcontainerhub" />
+    <preference name="eu.endare.push.app_key" value="LRJr63fhQyevsdkR4eNl1w" />
+    <preference name="eu.endare.push.app_secret" value="IrWuxflwQmGK9CAxy1ZPzQ" />
+    <feature name="Device">
+        <param name="wp-package" value="Device" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="wp-package" value="SplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+</widget>

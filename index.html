@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<title>Mi Movistar - AR</title>
+<style>
+*{ margin:0; padding:0}
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;     /* prevent copy paste, to allow, change 'none' to 'text' */
+
+    }
+
+input {
+    -webkit-user-select: auto !important;
+}
+html, body{  width:100%; height:100%}
+body {
+  -ms-touch-action: none;
+}
+#footer{ background:#000; opacity:.6; height:50px; position:fixed; bottom:0; left:0; width:100%; text-align:center; cursor:pointer; }
+#footer span{ color:#FFF; opacity:1; font-family:Arial, Helvetica, sans-serif; font-size:12px; width:200px; display:inline-block; line-height:normal; padding-top:10px}
+#footer div{ }
+
+#header{ height:62px; background:#005474; width:100%; border:2px solid #004D6E; position:fixed; z-index:1000; box-sizing:border-box}
+#button_home{ width:55px; height:60px; border-right:2px solid #004D6E; background: url(images/menu_home_bg.png) center center no-repeat; background-size:50px 58px; float:left; cursor:pointer}
+@font-face {
+    font-family: 'movistar_headlineregular';
+    src: url('font/movistarheadline-regular-webfont.eot');
+    src: url('font/movistarheadline-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/movistarheadline-regular-webfont.woff2') format('woff2'),
+         url('font/movistarheadline-regular-webfont.woff') format('woff'),
+         url('font/movistarheadline-regular-webfont.ttf') format('truetype'),
+         url('font/movistarheadline-regular-webfont.svg#movistar_headlineregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+#title{ padding:0 20px; height:60px; font-family:movistar_headlineregular; line-height:60px; color:#FFF; font-size:18px; font-weight:bold; float:left}
+#tricon{ width:55px; height:60px; position:absolute; top:0; right:0; background: url(images/menu_icon.png) center center no-repeat; background-size:26px 20px; cursor:pointer; display:none}
+#subnav{ height:50px; background:#000; position:fixed; width:100%; overflow:hidden; z-index:1000; left:0; top:60px; font-family:movistar_headlineregular; line-height:50px; color:#FFF; font-size:12px; font-weight:bold; text-align:center}
+#subnavelement1{border-right:1px solid #171719; width:33%; height:50px;  box-sizing:border-box; float:left;  cursor:pointer; position:relative;}
+#subnavelement2{ width:33%; height:50px; box-sizing:border-box;  float:left;cursor:pointer;position:relative;}
+#subnavelement3{ width:34%; height:50px; border-left:1px solid #171719;  box-sizing:border-box; display:inline-block; float:right; cursor:pointer;position:relative;}
+#subnavelement1 div,#subnavelement2 div,#subnavelement3 div{ position:absolute; width:100%; height:5px; left:0; bottom:0; background:#4B5154;}
+.subnavactive div{background:#00B8C5 !important;}<hr>
+<hr>
+
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
+#title{ font-size:13px; }
+}
+#app{position:relative; width:100%; height:100%; height:0; visibility:hidden}
+#tap{position:absolute; width:100%; height:100%; background: url(images/app_4g_home_Loader.png) center center no-repeat #0999B7; background-size:contain;  left:0; top:0; z-index:100;}
+#tap2,#tap3{position:absolute; width:100%; height:0; background: url(images/app_4g_home_Loader.png) center center no-repeat #0999B7; background-size:contain;  left:0; top:0; z-index:1000; visibility:hidden}
+#terminos{ width:90%;height:100%; background:#E5E5E5; margin:auto; background:#fff; margin-top:0}
+#text_terms{ width:90%; height:70%; margin:auto; position:relative;  overflow:auto; background:#005474;  font-family:movistar_headlineregular;   color:#FFF; font-size:10px; padding:10px}
+#title4{ width:90%; padding:0 ;  font-family:movistar_headlineregular; padding-top:20px;  padding-bottom:10px;  color:#0F5C84; font-size:14px; margin:auto }
+
+::-webkit-scrollbar{
+	-webkit-appearance: none;
+	width: 11px;
+	height:11px;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 8px;
+	background-color: rgba(30,30,30,.3);
+	
+}
+::-webkit-scrollbar-track {
+  
+	background-color: rgba(0,84,116,1);
+    border-radius: 8px;
+}
+#acepto{ width:200px; margin:auto; margin-top:10px; font-family:movistar_headlineregular;  color:#0F5C84; font-size:12px; height:20px; display:block}
+#acepto input{ position:relative; margin-right:5px; top:2px}
+#continuar{ background:#005474; color:#FFF;font-family:movistar_headlineregular; text-align:center; border:none; padding:10px; margin:5px auto; display:block}
+.cajaalert{
+	background-color:#FFF; 
+	-webkit-box-shadow: inset 0px 0px 15px #cacaca;
+	-moz-box-shadow: inset 0px 0px 15px #cacaca;
+	box-shadow: inset 0px 0px 15px #cacaca;
+	border:1px solid #D8D8D7;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#000;
+}
+#pase{ position:relative; top:110px; background:url(images/pase/pase/bkg_gray.png); background-size:contain; width:100%; height:0; visibility:hidden; overflow:hidden}
+#innerpase{ width:95%; margin:auto; position:relative; top:15px; height:100%}
+#innerpase h3{font-family:movistar_headlineregular; font-weight:bold; font-size:18px; text-align:center; color:#00577E; padding:15px 0; background:#fff}
+#map-canvas{ width:100%;height: calc(100% - 110px); position:relative; top:110px;}
+#cobertura{ position:relative; top:110px; height: calc(100% - 110px); background:url(images/app4gMAPAA.png) center top no-repeat #D0D0D0; background-size:contain;  height:0; visibility:hidden}
+body {
+	background-color: #d0d0d0;
+}
+
+@media (orientation: landscape) {
+	#tap2 {
+		 visibility:visible;
+		 height:100%;
+	}
+}
+#p,#a,#s,#e{ width:90%; margin:auto; height:60px; display:table-cell; vertical-align:middle; overflow:hidden; position:relative; background:#fff}
+#p img,#a img,#s img,#e img{ float:left; display:block; margin-right:10px; vertical-align:middle; margin-left:10px}
+.mjearriba{font-family:movistar_headlineregular;  font-size:12px; text-align:left; color:#515559; position: relative; top: 50%;
+  transform: translateY(-50%);float:left; max-width:calc(100% - 90px);}
+.clear{ clear:both; height:10px; background:#fff; }
+.clear div{ height:1px; background:#D0D0D0; width:calc(100% - 90px); position:relative; top:4px; left:80px}
+#innremap{ height:100%; background: url(images/pase/pase/bkg_map.png) no-repeat; width:100%; background-size:contain; text-align:center; position:relative; font-size:0;}
+#listapase{ background:#fff}
+#log{width:0; height:0; position:absolute; top:-15000px;}
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false"></script>
+
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/src/infobox.js"></script>
+<script type="text/javascript" src="js/panino.js"></script>
+<script type="text/javascript" src="js/comunes.js"></script>
+<script type="text/javascript" src="js/paninoOverlay.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="js/paninoAJAX.js"></script>
+<script type="text/javascript" src="js/transicion.js"></script>
+<script type="text/javascript" src="js/mobile_detect.js"></script>
+<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+<script type="text/javascript" src="http://api.movistar.acrons.net/time/0.js?a=1"></script>
+
+<script>
+ns.checkTemp=['0','1','0','0'];
+function checkOnline(){
+	var isOffline = ('onLine' in navigator && !navigator.onLine);
+	if(isOffline){
+		alert('Debe conectarse a Internet para continuar');
+		 $('tap3').style.visibility='visible';
+		 $('tap3').style.height='100%';
+	}else{
+		$('tap3').style.visibility='hidden';
+		$('tap3').style.height='0';
+		setTimeout(checkOnline,500);
+		 
+	}
+	
+}
+DR(function(){
+	setTimeout(checkOnline,500);
+}
+);
+var map;
+var geocoder = null;
+var closest = [];
+var rendererOptions = {
+  map: map,
+  suppressMarkers : true
+}
+try{
+	var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+	var directionsService = new google.maps.DirectionsService();
+}catch(er){
+	
+}
+
+
+var directionsDisplay;
+var yo;
+var todosmarkers=[];
+var myStyles =[
+    {
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [
+              { visibility: "off" }
+        ]
+    }
+];
+function initialize(lat,long) {
+  var mapOptions = {
+    zoom: 14,
+	styles: myStyles,
+    center: new google.maps.LatLng(lat,long),
+	/*disableDefaultUI: true*/
+	zoomControl: true,
+	streetViewControl: false,
+	disableDefaultUI: true,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.SMALL,
+	  position: google.maps.ControlPosition.RIGHT_CENTER
+    }
+  }
+ map = new google.maps.Map(document.getElementById('map-canvas'),
+                                mapOptions);
+  showPosition(ns.lat,ns.long)
+  setTimeout(function(){
+  setMarkers(map, ns.buildings);},1000);
+  directionsDisplay.setMap(map);
+  
+  
+}
+
+function initialize2(lat,long){
+	directionsDisplay.set('directions', null);
+	var mapOptions = {
+    zoom: 14,
+	styles: myStyles,
+    center: new google.maps.LatLng(lat,long),
+	zoomControl: true,
+	streetViewControl: false,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.SMALL,
+	  position: google.maps.ControlPosition.RIGHT_CENTER
+    }
+  }
+ map = new google.maps.Map(document.getElementById('map-canvas'),
+                                mapOptions);
+  showPosition(ns.lat,ns.long)
+  setTimeout(function(){
+  setMarkers(map, ns.antennas);},1000);
+  directionsDisplay.setMap(map);
+  
+}
+
+
+function setMarkers(map, locations){
+	geocoder = new google.maps.Geocoder();
+	var bounds = new google.maps.LatLngBounds();
+	
+	var shape = {
+      coord: [1, 1, 60,1, 60,60,1,60,1,1],
+      type: 'poly'
+   };
+   
+   for (var i = 0; i < locations.length; i++) {
+	   
+
+	(function(locations,i){
+	var beach = locations[i];
+	
+	var imurl;
+	switch(beach['tipo']){
+		case 'buildings':
+		imurl='images/building.png';
+		break;
+		case 'antenna':
+		imurl='images/antena.png';
+		break;
+		
+	}
+			  
+    
+    var myLatLng = new google.maps.LatLng(beach['latitud'], beach['longitud']);
+	
+    bounds.extend(myLatLng);
+	
+	var image = {
+    url: imurl,
+    // This marker is 20 pixels wide by 32 pixels tall.
+    size: new google.maps.Size(60, 68),
+    // The origin for this image is 0,0.
+    origin: new google.maps.Point(0,0),
+    // The anchor for this image is the base of the flagpole at 0,32.
+    anchor: new google.maps.Point(53, 68)
+  };
+  
+    var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        icon: image,
+        shape: shape,
+        title: beach['tipo_data'],
+        zIndex: i
+    });
+	var distance,comollegar;
+	if(yo){
+		distance='<br>'+Math.floor(getDistance(yo.position,marker.position)/1000)+' Km.';
+		comollegar='<img style="position:absolute; bottom:30px; right:30px" width="80" height="18" src="images/como_llegar.png" onclick="comoLlegar('+i+'); stopEvent(event)" />';
+	}else{
+		distance='';
+		comollegar='';
+	}
+	
+		
+		var el=document.createElement('div');
+		el.innerHTML='<div onclick="closeAllInfoBoxes()" style=" width:250px; height:189px; background:url(images/box.png); cursor:pointer; position:relative">		<div style=" font-family:Arial, Helvetica, sans-serif; font-size:11px;font-weight:bold;width:180px; height:20Ppx; position:absolute; left:28px; top:72px">Demo 4G</div>	<div style="font-family:Arial, Helvetica, sans-serif; font-size:14px;font-weight:normal;width:180px; height:20Ppx; position:absolute; left:28px; top:102px">'+beach['tipo_data']+distance+'</div>	'+comollegar+'</div>';
+		
+		
+		var infobox = new InfoBox({
+		alignBottom:true,
+         content: el,
+         disableAutoPan: false,
+         maxWidth: 250,
+         pixelOffset: new google.maps.Size(-87, -50),
+         zIndex: null,
+         boxStyle: {
+            background: "none",
+            opacity: 1,
+            width: "280px"
+        },
+        closeBoxMargin: "30px 58px 0px 0px",
+        closeBoxURL: "images/Vacio.gif",
+        infoBoxClearance: new google.maps.Size(1, 1),
+		isHidden: false		,pane: "floatPane"
+		,enableEventPropagation: false
+    });
+	marker.infobox=infobox;
+	
+	 todosmarkers.push(marker);
+	//if(imurl!='images/antena.png'){
+		google.maps.event.addListener(marker, 'click', function() {
+			var curMarker=this;
+			for(var i=0,l=todosmarkers.length;i<l;i++){
+				if(todosmarkers[i]!=curMarker){
+					todosmarkers[i].infobox.close();
+				}
+			}
+			infobox.open(map,this);
+			 map.panTo(marker.position);
+	   });
+		if(imurl=='images/antena.png'){
+	  var distOptions = {
+      strokeColor: '#00FF00',
+      strokeOpacity: 0.8,
+      strokeWeight: 1,
+      fillColor: '#00FF00',
+      fillOpacity: 0.35,
+      map: map,
+      center: marker.position,
+      radius: beach['radius'] * 1000
+    };
+    // Add the circle for this city to the map.
+    cityCircle = new google.maps.Circle(distOptions);
+		}
+		
+		
+	//}
+  })(locations,i);
+  }
+  //map.fitBounds(bounds);
+  evaluarQueZoomHacer();
+}
+function evaluarQueZoomHacer(bounds){
+	if(!yo)return;
+	var miubicacion= yo.position;
+    closest = findClosestN(miubicacion);
+    closest = closest[0];
+	var start = miubicacion;
+	var end =  closest.position;
+	var d=getDistance(start, end)/1000;
+	if(d>10){
+		map.setZoom(11);
+	}
+}
+function getLocation(){
+  if (navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(function(position){ns.lat=position.coords.latitude;ns.long=position.coords.longitude;});
+  }
+}
+function showPosition(lat,long){
+	 var myLatLng = new google.maps.LatLng(lat,long);
+	// map.panTo(myLatLng);
+	 var image = {
+    url: 'images/mi_ubicacion_marker.png',
+    // This marker is 20 pixels wide by 32 pixels tall.
+    size: new google.maps.Size(40, 43),
+    // The origin for this image is 0,0.
+    origin: new google.maps.Point(0,0),
+    // The anchor for this image is the base of the flagpole at 0,32.
+    anchor: new google.maps.Point(20, 39)
+	
+	
+  };
+  var shape = {
+      coord: [1, 1, 40,1, 40,43,1,43,1,1],
+      type: 'poly'
+  };
+    var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        icon: image,
+        shape: shape,
+        title: 'Mi ubicación',
+        zIndex: 1000
+    });
+	yo=marker;
+	
+}
+
+function rad(x) {
+  return x * Math.PI / 180;
+};
+
+function getDistance(p1, p2) {
+  var R = 6378137; // Earth's mean radius in meter
+  var dLat = rad(p2.lat() - p1.lat());
+  var dLong = rad(p2.lng() - p1.lng());
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(rad(p1.lat())) * Math.cos(rad(p2.lat())) *
+    Math.sin(dLong / 2) * Math.sin(dLong / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c;
+  return d; // returns the distance in meter
+};
+
+
+function ocultarTodos(){
+	for (var i=0; i<todosmarkers.length;i++) {
+		todosmarkers[i].setMap(null);
+	}
+	 yo.setMap(null);
+}
+function codeAddress() {
+			if(!yo)return;
+			var miubicacion= yo.position;
+            map.setCenter(miubicacion);
+	    /*if (customerMarker) customerMarker.setMap(null);
+            customerMarker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });*/
+	    	closest = findClosestN(miubicacion);
+            // get driving distance
+            closest = closest[0];
+         	
+		      var start = miubicacion;
+			  var end =  closest.position;
+			  //ocultarTodos();
+			  var request = {
+				  origin:start,
+				  destination:end,
+				  travelMode: google.maps.TravelMode.WALKING
+			  };
+			  directionsService.route(request, function(response, status) {
+				if (status == google.maps.DirectionsStatus.OK) {
+				  directionsDisplay.setDirections(response);
+				}
+			  });
+		   
+		   
+		
+      }
+
+
+function findClosestN(pt) {
+   var closest = [];
+   
+   for (var i=0; i<todosmarkers.length;i++) {
+     todosmarkers[i].distance = google.maps.geometry.spherical.computeDistanceBetween(pt,todosmarkers[i].getPosition());
+     closest.push(todosmarkers[i]);
+   }
+   closest.sort(sortByDist);
+   return closest;
+}
+
+function sortByDist(a,b) {
+   return (a.distance- b.distance)
+}
+function mostrarMapa(){
+	directionsDisplay.set('directions', null);
+	$('cobertura').style.height='0';
+	$('cobertura').style.visibility='hidden';
+	$('pase').style.height='0';
+	$('pase').style.visibility='hidden';
+	
+	$('subnavelement1').className='';
+	$('subnavelement2').className='subnavactive';
+	$('subnavelement3').className='';
+	$('map-canvas').style.visibility='visible';
+	$('map-canvas').style.height='calc(100% - 110px)';
+	$('app').css('height','100%');
+	$('app').css('visibility','visible');
+	$('footer').css('height','50px');
+	$('footer').css('visibility','visible');
+	
+	initialize( ns.lat,ns.long);
+}
+function ShowPase(){
+	
+	
+	$('app').css('height','100%');
+	$('app').css('visibility','visible');
+	$('cobertura').style.height='0';
+	$('cobertura').style.visibility='hidden';
+	$('subnavelement1').className='subnavactive';
+	$('subnavelement2').className='';
+	$('subnavelement3').className='';
+	$('map-canvas').style.visibility='hidden';
+	$('map-canvas').style.height='0';
+	$('pase').css('height','calc(100% - 110px)');
+	$('pase').css('visibility','visible');
+	
+	$('footer').css('height','0');
+	$('footer').css('visibility','hidden');
+}
+
+function ShowCobertura(){
+	if(!ns.antennas || ns.antennas.length<1){return ShowCoberturaAlt();}
+	directionsDisplay.set('directions', null);
+	$('pase').style.height='0';
+	$('pase').style.visibility='hidden';
+	$('cobertura').style.height='0';
+	$('cobertura').style.visibility='hidden';
+	$('subnavelement1').className='';
+	$('subnavelement2').className='';
+	$('subnavelement3').className='subnavactive';
+	$('map-canvas').style.visibility='visible';
+	$('map-canvas').style.height='calc(100% - 110px)';
+	$('app').css('height','100%');
+	$('app').css('visibility','visible');
+	$('footer').css('height','0');
+	$('footer').css('visibility','hidden');
+	
+	initialize2( ns.lat,ns.long);
+	
+	
+	
+}
+function ShowCoberturaAlt(){
+	$('cobertura').css('height','calc(100% - 110px)');
+	$('cobertura').css('visibility','visible');
+	
+	
+	$('app').css('height','100%');
+	$('app').css('visibility','visible');
+	
+	$('subnavelement1').className='';
+	$('subnavelement2').className='';
+	$('subnavelement3').className='subnavactive';
+	
+	$('map-canvas').style.visibility='hidden';
+	$('map-canvas').style.height='0';
+	$('pase').css('height','0');
+	$('pase').css('visibility','hidden');
+	
+	$('footer').css('height','0');
+	$('footer').css('visibility','hidden');
+}
+
+DR(
+	function(){
+		setTimeout(
+			function(){
+				
+				if(localStorage.getItem('acepto')=='ok'){
+						$('terminos').style.height='0';
+						$('terminos').style.visibility='hidden';
+						$('subnavelement1').className='subnavactive';
+						$('subnavelement2').className='';
+						$('subnavelement3').className='';
+						
+						$('map-canvas').style.visibility='hidden';
+						$('map-canvas').style.height='0';
+						
+						
+						$('app').css('height','100%');
+						$('app').css('visibility','visible');
+	
+						$('pase').css('height','calc(100% - 110px)');
+						$('pase').css('visibility','visible');
+						$('footer').css('height','0');
+						$('footer').css('visibility','hidden');
+	
+						$('app').style.opacity=0;
+						fx($('app'),[{'inicio':0,'fin':1,'u':'','propCSS':'opacity'}],1000,true,senoidal);
+						//mostrarMapa();
+						$('tap').onMotionFinished=function(){
+							$('tap').style.visibility='hidden';
+							$('tap').style.height='0';
+						}
+						fx($('tap'),[{'inicio':1,'fin':0,'u':'','propCSS':'opacity'}],500,true,senoidal);
+				}else{
+						$('terminos').css('height','100%');
+						$('terminos').css('visibility','visible');
+						
+						$('terminos').style.opacity=0;
+						fx($('terminos'),[{'inicio':0,'fin':1,'u':'','propCSS':'opacity'}],1000,true,senoidal);
+						$('tap').onMotionFinished=function(){
+							$('tap').style.visibility='hidden';
+							$('tap').style.height='0';
+						}
+						fx($('tap'),[{'inicio':1,'fin':0,'u':'','propCSS':'opacity'}],500,true,senoidal);
+				}
+				
+				
+				
+			},1000		   
+		);
+		
+		$('continuar').addEvent(
+			'click',
+			function(){
+				if(!$('chacepto').checked){
+					alert('Debe aceptar los Términos y condiciones');
+				}else{
+					$('f1').submit();
+					localStorage.setItem('acepto','ok');
+          			$('app').css('height','100%');
+					$('app').css('visibility','visible');
+					$('app').style.opacity=0;
+					$('subnavelement1').className='subnavactive';
+					$('subnavelement2').className='';
+					$('subnavelement3').className='';
+					
+					$('map-canvas').style.visibility='hidden';
+					$('map-canvas').style.height='0';
+					$('footer').css('height','0');
+					$('footer').css('visibility','hidden');
+					
+					$('pase').css('height','calc(100% - 110px)');
+					$('pase').css('visibility','visible');
+					fx($('app'),[{'inicio':0,'fin':1,'u':'','propCSS':'opacity'}],1000,true,senoidal);
+					//mostrarMapa();
+					$('terminos').onMotionFinished=function(){
+						$('terminos').style.visibility='hidden';
+						$('terminos').style.height='0';
+					};
+					fx($('terminos'),[{'inicio':1,'fin':0,'u':'','propCSS':'opacity'}],500,true,senoidal);
+       			}					
+				
+			}
+		);
+		
+		
+	}   
+);
+
+
+function comoLlegar(mIndex){
+	if(!yo)return;
+	directionsDisplay.set('directions', null);
+	var miubicacion= yo.position;
+    map.setCenter(miubicacion);
+	var start = miubicacion;
+	var end =  todosmarkers[mIndex].getPosition();
+			  var request = {
+				  origin:start,
+				  destination:end,
+				  travelMode: google.maps.TravelMode.WALKING
+			  };
+			  directionsService.route(request, function(response, status) {
+				if (status == google.maps.DirectionsStatus.OK) {
+				  directionsDisplay.setDirections(response);
+				}
+			  });
+}
+function closeAllInfoBoxes(){
+	for(var i=0,l=todosmarkers.length;i<l;i++){
+		todosmarkers[i].infobox.close();
+	}
+}
+DR(
+   	function(){
+		getLocation();
+		getScript(
+				'http://api.movistar.acrons.net/p1.php?'+(+new Date()),
+				  function(){
+					  $('text_terms').innerHTML=ns.terms;
+					  ns.antennas=[];
+					  ns.buildings=[];
+					  for(var i=0,l=beaches.length;i<l;i++){
+					      if(beaches[i]['tipo']=='buildings'){
+							  ns.buildings.push(beaches[i]);
+						  }else if(beaches[i]['tipo']=='antenna'){
+							    ns.antennas.push(beaches[i]);
+						  }
+					  }
+				   }
+		);
+		
+	}
+);
+
+document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+		$('user_id').value=device.uuid;
+		$('os_version').value=device.version;
+		$('os').value=device.platform;
+		$('mobile_model').value=device.model;
+		var md=new MobileDetect(navigator.userAgent);
+		$('mobile_maker').value=md.phone() || 'Unknown';
+		$('deviceinternaid').value=device.uuid;
+}
+document.addEventListener('touchstart', this.touchstart);
+document.addEventListener('touchmove', this.touchmove);
+
+function touchstart(e) {
+    e.preventDefault()
+}
+
+function touchmove(e) {
+    e.preventDefault()
+}
+function getQueryVariable(query,variable)
+{
+      
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+
+DR(
+   function(){
+	   acrons.info(function(info) {
+			var response=info['x-msisdn'];
+			if(typeof response!='undefined' && response!='undefined'){
+				ns.ani=response;
+				if(!ns.ani || ns.ani.length<10){
+					errorPase(5);
+					return;
+				}
+				ns.ani=data['x-msisdn'].substr(-10);
+				cuoma();
+			}else{
+				errorPase(5);
+			}
+			
+			
+			
+		});
+	}
+);
+
+function errorPase(nro,arr,aba,url){
+	switch(nro){
+		case 5:
+			$('pim').src='images/pase/pase/p_off.png';
+			$('par').innerHTML='No podemos identificar tu plan.<br><span style="color:#46D4E1; font-weight:bold">Ingresá en Mi Cuenta para conocerlo ></span>';
+			$('eim').src='images/pase/pase/e_off.png';
+			$('ear').innerHTML='No podemos identificar tu equipo.<br><span onclick="window.location=\'http://www.movistar.com.ar/4glte\'" style="color:#46D4E1; font-weight:bold">Verificá si es compatible con Banda 4 AWS ></span>';
+			ns.checkTemp[0]='0';
+			ns.checkTemp[3]='0';
+			
+			
+		break;
+		case 4:
+		$('pim').src='images/pase/pase/p_off.png';
+		$('par').innerHTML=arr+'<br><span onclick="window.location=\''+url+'\'" style="color:#46D4E1; font-weight:bold">'+aba+' ></span>';
+		ns.checkTemp[0]='0';
+		break;
+		case 3:
+		$('pim').src='images/pase/pase/p_on.png';
+		$('par').innerHTML=arr+'<br><span onclick="window.location=\''+url+'\'" style="color:#46D4E1; font-weight:bold">'+aba+' ></span>';
+		ns.checkTemp[0]='1';
+		break;
+	}
+}
+function cuoma(){
+	/**/
+	var h=new http();
+	h.open('get','http://ofertaideal.com/api/v1/actual_plan/ani/'+ns.ani,false);
+	h.send(null);
+	var response=h.responseText;
+	/**/
+	//var response='{"ani":"2616297711","commercial_update":1,"actual_plan":{"name":"Plan Control BB","code":"PLCBBG","price":300}}';
+	if(typeof response!='undefined' && response.indexOf('actual_plan')!=-1){
+		var data=JSON.parse(response);
+		ns.planCode=data['actual_plan']['code'];
+		queryPase();
+	}else{
+		errorPase(5);
+		
+	}
+}
+function queryPase(){
+	/**/
+	var h=new http();
+	
+	
+	h.open('get','http://container.movistar.acrons.net/JSON/ormm.php?q=pase_wp&a[plan_code]='+encodeURIComponent(ns.planCode)+'&a[uSIM]=null&a[mobile_maker]='+encodeURIComponent($('mobile_maker').value)+'&a[mobile_model]='+encodeURIComponent($('mobile_model').value)+'&a[tac]=null&a[firmware_version]='+encodeURIComponent($('os_version').value),false);
+	h.send(null);
+	var response=h.responseText;
+	/**/
+	//var response='{"ACK":200,"data":[[],[1],[],[],[],[{"Identificador":"DEFAULT","Mensaje":"Tu plan no es 4G LTE.","Action":"Ingres\u00e1 en Mi Movistar y cambia tu plan!","url":"https:\/\/online.movistar.com.ar\/"}]]}';
+	if(typeof response!='undefined' && response.indexOf('"ACK":200')!=-1){
+		var data=JSON.parse(response);
+		ns.planexiste=data['data'][0][0];
+		if(parseInt(ns.planexiste)==1){
+			errorPase(3,data['data'][5][0]['Mensaje'],data['data'][5][0]['Action'],data['data'][5][0]['url']);
+		}else{
+			errorPase(4,data['data'][5][0]['Mensaje'],data['data'][5][0]['Action'],data['data'][5][0]['url']);
+		}
+		
+		ns.model_maker_existe=data['data'][2][0];
+		if(parseInt(ns.model_maker_existe)==1){
+			$('eim').src='images/pase/pase/e_on.png';
+			if(parseFloat($('os_version').value)>=8.1){
+				$('ear').innerHTML='Tu smartphone está listo para navegar en 4G LTE.';
+				ns.checkTemp[3]='1';
+			}else{
+				$('ear').innerHTML='Tu smartphone necesita una actualización de software para navegar en 4G LTE.';
+				ns.checkTemp[3]='0';
+			}
+			
+			
+		}else if(parseInt(ns.model_maker_existe)==0){
+			$('eim').src='images/pase/pase/e_off.png';
+			$('ear').innerHTML='Con tu smartphone no podés navegar en 4G LTE.<br><span onclick="window.location=\'http://www.tiendamovistar.com.ar/\'" style="color:#46D4E1; font-weight:bold">Ver smartphones 4G en Tienda Movistar ></span>';
+			ns.checkTemp[3]='0';
+		}else{
+			$('eim').src='images/pase/pase/e_off.png';
+			$('ear').innerHTML='No podemos identificar tu equipo.<br><span onclick="window.location=\'http://www.movistar.com.ar/4glte\'" style="color:#46D4E1; font-weight:bold">Verificá si es compatible con Banda 4 AWS ></span>';
+			ns.checkTemp[3]='0';
+		}
+		
+		
+		
+		
+	}else{
+		errorPase(5);
+		
+	}
+	
+	if(ns.ani && ns.ani.length>9){
+		var valani='null';
+		if(ns.ani && ns.ani.length>9){
+			valani=ns.ani;
+		}
+		$('nuevoscampos').innerHTML='<input name="values[sim_id]" value="null" type="hidden"> <input name="values[imei]" value="null" type="hidden"> <input name="values[imsi]" value="null" type="hidden"> <input id="ani" name="values[msisdn]" value="'+valani+'" type="hidden"><input name="values[is_tablet]" value="false" type="hidden"><input name="values[mobile_network]" value="AR%20-%20Movistar" type="hidden"><input name="values[points]" value="'+ns.checkTemp.join('')+'" type="hidden">';
+		$('f1').submit();
+	}
+	
+}
+function deleteAllCookies() {
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+    	var cookie = cookies[i];
+    	var eqPos = cookie.indexOf("=");
+    	var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    	document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+}
+
+
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+<div id="terminos">
+<h1 id="title4">T&eacute;rminos y condiciones</h1>
+	<div id="text_terms"></div>
+    <label id="acepto"><input id="chacepto" name="" type="checkbox" value="">Acepto T&eacute;rminos y condiciones</label>
+    <input  id="continuar" value="Continuar" name="" type="button">
+</div>
+
+<div id="app">
+<div id="header">
+        <div id="title">4G LTE</div>
+        <div  onClick="location.reload()" id="tricon"></div>
+</div>
+<div id="subnav">
+	<div id="subnavelement1" onClick="ShowPase()">PASE<div></div></div>
+    <div id="subnavelement2" onClick="mostrarMapa()" class="subnavactive">Probar 4G<div></div></div>
+    <div id="subnavelement3" onClick="ShowCobertura()">Cobertura<div></div></div>
+</div>
+<div id="map-canvas"></div>
+
+    <div id="pase">
+        <div id="innerpase">
+        <h3>¿Estás preparado para 4G?</h3>
+        <div id="listapase">
+             <div id="p">
+                 <img id="pim" src="images/pase/pase/p_off.png" width="60" height="60">
+                 <div class="mjearriba" id="par">No podemos identificar tu plan.<br><span style="color:#46D4E1; font-weight:bold">Ingresá en Mi Cuenta para conocerlo ></span></div>
+                
+             </div> <div class="clear"><div></div></div>
+              <div id="a">
+                 <img src="images/pase/pase/a_on.png" width="60" height="60">
+                 <div class="mjearriba">Con esta App vas a saber todo sobre 4G de Movistar.<br><span style="color:#46D4E1; font-weight:bold">Configurar notificaciones ></span></div>
+                 
+             </div><div class="clear"><div></div></div>
+              <div id="s">
+                 <img src="images/pase/pase/s_off.png" width="60" height="60">
+                 <div class="mjearriba">¿Querés saber si tu chip está listo para navegar en 4G LTE?<br><span style="color:#46D4E1; font-weight:bold">Hace click acá ></span></div>
+               
+             </div>  <div class="clear"><div></div></div>
+              <div id="e">
+                 <img id="eim" src="images/pase/pase/e_off.png" width="60" height="60">
+                 <div class="mjearriba" id="ear">No podemos identificar tu equipo.<br><span onClick="window.location='http://www.movistar.com.ar/4glte'" style="color:#46D4E1; font-weight:bold">Verificá si es compatible con Banda 4 AWS ></span></div>
+                 
+             </div><div class="clear"></div>
+       </div>
+             <div id="innremap" onClick="mostrarMapa();">
+              
+             </div>
+      </div>
+    </div>
+
+
+<div id="cobertura" onClick="mostrarMapa();"></div>
+<div id="footer" onClick="codeAddress()"><span>&iexcl;Ven&iacute; a probar la Demo 4G m&aacute;s cercana y experiment&aacute; la diferencia!</span><div></div></div>
+</div>
+<div style="position:absolute;left:-1500px;top:-1500px; background:url(images/ajax-loader.gif) 50% 50% no-repeat; text-align:center;z-index:120" id="qq"></div>
+<div id="tap"></div>
+<div id="tap2"></div>
+<div id="tap3"></div>
+<form id="f1" action="http://container.movistar.acrons.net/JSON/orm.php" target="ifr" method="post">
+  <input name="odku" value="1" type="hidden">
+  <input name="class" value="Container_users" type="hidden">
+  <input name="values[user_id]" id="user_id" value="" type="hidden">
+  <input name="values[os]" id="os" value="" type="hidden">
+  <input name="values[mobile_model]" id="mobile_model"  value="" type="hidden">
+  <input name="values[os_version]" id="os_version"  value="" type="hidden">
+  <input name="values[type]" value="WP" type="hidden" id="type">
+  <input id="mobile_maker" name="values[mobile_maker]" value="WP8" type="hidden">
+   <input name="values[DeviceInternalD]" id="deviceinternaid" value="" type="hidden">
+  <div id="nuevoscampos"></div>
+</form>
+<iframe id="ifr" name="ifr" style="width:0; height:0; position:absolute; top:-15000px;"></iframe>
+<div id="log"></div>
+</body>
+</html>
